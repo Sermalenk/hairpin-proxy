@@ -1,0 +1,4 @@
+#!/bin/sh
+set -e
+docker build -t sermalenk/hairpin-proxy-controller .
+docker push sermalenk/hairpin-proxy-controller

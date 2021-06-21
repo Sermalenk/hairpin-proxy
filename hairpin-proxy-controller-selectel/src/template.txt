@@ -1,0 +1,14 @@
+$zone:53 {
+    $rewrites
+    kubernetes cluster.local in-addr.arpa ip6.arpa {
+      pods verified
+      fallthrough in-addr.arpa ip6.arpa
+    }
+    log
+    loop
+    errors
+    forward . /etc/resolv.conf
+    cache 30
+    reload
+    loadbalance
+}
