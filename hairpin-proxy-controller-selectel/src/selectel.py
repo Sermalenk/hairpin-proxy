@@ -47,10 +47,16 @@ def make_host_line(host):
 
 def make_corefile(zones):
     zone_strs = []
+    all_rewrites = []
     for zone, hosts in zones.items():
         hosts_rewrites = "\n    ".join(map(make_host_line, hosts))
+        all_rewrites.append(hosts_rewrites)
         zone_strs.append(
-            ZONE_TEMPLATE.substitute({"zone": zone, "rewrites": hosts_rewrites}))
+            ZONE_TEMPLATE.substitute({"zone": zone, "rewrites": hosts_rewrites})
+        )
+    zone_strs.append(ZONE_TEMPLATE.substitute(
+        {"zone": "svc.cluster.local", "rewrites": "\n    ".join(all_rewrites)}
+    ))
     return "\n\n".join(zone_strs)
 
 
@@ -58,7 +64,7 @@ def get_existing_custom_corefile():
     api = client.CoreV1Api()
     try:
         config_map = api.read_namespaced_config_map(
-            "coredns-custom", "kube-system"
+            COREDNS_CUSTOM_CONFIGMAP, COREDNS_NAMESPACE
         )
     except client.ApiException as e:
         if e.status == 404:

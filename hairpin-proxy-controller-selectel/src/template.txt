@@ -4,8 +4,6 @@ $zone:53 {
       pods verified
       fallthrough in-addr.arpa ip6.arpa
     }
-    log
-    loop
     errors
     forward . /etc/resolv.conf
     cache 30
